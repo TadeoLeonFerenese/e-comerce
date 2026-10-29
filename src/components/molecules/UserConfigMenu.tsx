@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Settings,
   Sun,
@@ -16,6 +16,7 @@ import { useCommerceStore } from '../../store/useCommerceStore';
 
 export const UserConfigMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const { theme, role, adminTab, toggleTheme, setRole, setAdminTab } = useThemeStore();
   const { currentUser, setLoginModalOpen, logout } = useAuthStore();
   const transactions = useCommerceStore((s) => s.transactions);
@@ -23,8 +24,35 @@ export const UserConfigMenu: React.FC = () => {
 
   const isAdminUser = currentUser?.role === 'admin';
 
+  // Manejador para cerrar el dropdown al hacer click afuera o presionar Escape
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
+
   return (
-    <div className="relative h-fit">
+    <div ref={menuRef} className="relative h-fit">
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -42,7 +70,7 @@ export const UserConfigMenu: React.FC = () => {
         <div
           role="region"
           aria-label="Panel de Mi Configuración"
-          className="absolute right-0 mt-2 w-72 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 shadow-2xl p-4 z-50 flex flex-col gap-3 text-slate-800 dark:text-zinc-100"
+          className="absolute right-0 mt-2 w-[calc(100vw-1.5rem)] max-w-xs sm:w-72 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 shadow-2xl p-4 z-50 flex flex-col gap-3 text-slate-800 dark:text-zinc-100"
         >
           {/* Sección 1: Apariencia (Toggle Switch Modo Claro / Modo Oscuro) */}
           <div className="flex flex-col gap-1.5 pb-3 border-b border-slate-100 dark:border-zinc-800">

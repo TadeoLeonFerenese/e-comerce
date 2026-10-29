@@ -44,13 +44,13 @@ export const CartDrawer: React.FC = () => {
       />
 
       {/* Slide-over panel */}
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white dark:bg-zinc-900 shadow-2xl flex flex-col border-l border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-100">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+        <div className="w-screen max-w-full sm:max-w-md bg-white dark:bg-zinc-900 shadow-2xl flex flex-col border-l border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-100">
           {/* Header */}
-          <div className="px-5 py-4 border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <h2 className="text-base font-bold text-slate-900 dark:text-zinc-100">
+          <div className="px-4 sm:px-5 py-4 border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
+              <ShoppingBag className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
+              <h2 className="text-base font-bold text-slate-900 dark:text-zinc-100 truncate">
                 Tu Carrito ({totalUnits})
               </h2>
             </div>
@@ -58,14 +58,14 @@ export const CartDrawer: React.FC = () => {
               type="button"
               onClick={() => setCartDrawerOpen(false)}
               aria-label="Cerrar carrito"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Items List */}
-          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+          <div className="flex-1 overflow-y-auto px-4 sm:px-5 py-4 space-y-3 sm:space-y-4">
             {cart.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center py-12 gap-3 text-slate-500 dark:text-zinc-400">
                 <ShoppingBag className="w-12 h-12 text-slate-300 dark:text-zinc-700 stroke-1" />
@@ -94,40 +94,40 @@ export const CartDrawer: React.FC = () => {
                   />
                   <div className="flex-1 min-w-0 flex flex-col justify-between">
                     <div>
-                      <div className="flex items-start justify-between gap-1">
-                        <h4 className="text-xs font-semibold text-slate-900 dark:text-zinc-100 truncate">
+                      <div className="flex items-start justify-between gap-2">
+                        <h4 className="text-xs font-semibold text-slate-900 dark:text-zinc-100 line-clamp-2 leading-snug">
                           {item.product.name}
                         </h4>
                         <button
                           type="button"
                           onClick={() => removeFromCart(item.product.id)}
                           aria-label={`Eliminar ${item.product.name} del carrito`}
-                          className="text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 p-0.5 cursor-pointer shrink-0"
+                          className="text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 p-1 -mr-1 -mt-0.5 cursor-pointer shrink-0"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
 
                       {item.isCrossSellBundle && (
-                        <span className="inline-block px-1.5 py-0.5 mt-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 rounded">
+                        <span className="inline-block px-1.5 py-0.5 mt-1 text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 rounded">
                           Combo 15% OFF
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center border border-slate-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-900">
+                    <div className="flex items-center justify-between gap-2 mt-2.5">
+                      <div className="flex items-center border border-slate-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-900 shrink-0">
                         <button
                           type="button"
                           onClick={() =>
                             updateCartQuantity(item.product.id, item.quantity - 1)
                           }
                           aria-label="Restar una unidad"
-                          className="px-2 py-0.5 text-xs text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-l-lg cursor-pointer"
+                          className="px-2.5 py-1 text-xs text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-l-lg cursor-pointer"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
-                        <span className="px-2 text-xs font-bold text-slate-800 dark:text-zinc-100">
+                        <span className="px-2.5 text-xs font-bold text-slate-800 dark:text-zinc-100">
                           {item.quantity}
                         </span>
                         <button
@@ -136,19 +136,19 @@ export const CartDrawer: React.FC = () => {
                             updateCartQuantity(item.product.id, item.quantity + 1)
                           }
                           aria-label="Sumar una unidad"
-                          className="px-2 py-0.5 text-xs text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-r-lg cursor-pointer"
+                          className="px-2.5 py-1 text-xs text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-r-lg cursor-pointer"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
                       </div>
 
-                      <div className="text-right">
-                        <span className="text-xs font-bold text-slate-900 dark:text-zinc-100">
-                          ${item.unitPriceApplied * item.quantity}
+                      <div className="text-right shrink-0">
+                        <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-zinc-100">
+                          ${(item.unitPriceApplied * item.quantity).toLocaleString('es-AR')}
                         </span>
                         {item.quantity > 1 && (
                           <span className="block text-[10px] text-slate-400 dark:text-zinc-500">
-                            (${item.unitPriceApplied} c/u)
+                            (${item.unitPriceApplied.toLocaleString('es-AR')} c/u)
                           </span>
                         )}
                       </div>
@@ -161,11 +161,11 @@ export const CartDrawer: React.FC = () => {
 
           {/* Footer & Checkout */}
           {cart.length > 0 && (
-            <div className="p-5 border-t border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/50 flex flex-col gap-3">
+            <div className="p-4 sm:p-5 border-t border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/50 flex flex-col gap-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-600 dark:text-zinc-400">Subtotal:</span>
                 <span className="text-base font-extrabold text-slate-900 dark:text-zinc-100">
-                  ${subtotal}
+                  ${subtotal.toLocaleString('es-AR')}
                 </span>
               </div>
 
@@ -181,7 +181,7 @@ export const CartDrawer: React.FC = () => {
                 className="w-full justify-center py-3 text-sm font-bold shadow-md bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
               >
                 <Zap className="w-4 h-4 mr-1.5" />
-                Finalizar Compra (${subtotal})
+                Finalizar Compra (${subtotal.toLocaleString('es-AR')})
               </Button>
 
               {/* Simuladores de Identidad para Pruebas Antifraude — Exclusivo para Administrador */}
